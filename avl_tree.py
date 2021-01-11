@@ -1,3 +1,5 @@
+# 참조 : https://www.geeksforgeeks.org/avl-tree-set-1-insertion/ 
+
 class TreeNode(object):
   def __init__(self,val):
     self.val = val
