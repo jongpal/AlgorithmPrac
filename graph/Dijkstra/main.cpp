@@ -34,7 +34,7 @@ void make_adjmatrix(int m[MAX_NODE][MAX_NODE], int* V, int* E){
     int from = name2int(vertex[0]);
     int to = name2int(vertex[1]);
     m[from][to] = w;
-    m[to][from] = w;
+    m[to][from] = w;  // undirected
   }
 };
 
