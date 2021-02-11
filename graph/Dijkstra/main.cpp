@@ -81,18 +81,23 @@ void dijkstra(int m[][MAX_NODE], int s, int V){
   check[s] = 1;
   checked++;
 
+    // loop for V times ( # of vertices )
   while(checked < V){
     x = 0;
     while(check[x]) x++;
 
+    // find smallest weight to adjacent node
     for (i = x; i < V; i++)
       if(check[i] == 0 && distance[i] < distance[x]) x = i;
     check[x] = 1;
     checked++;
-
+      
+    // loop and find the smallest path
     for( y = 0; y < V; y++){
       if(x == y || m[x][y] >= 1000 || check[y]) continue;
       d = distance[x] + m[x][y];
+        
+    // if smaller path found, set it to distance and set the parent
       if ( d < distance[y]){
         distance[y] = d;
         parent[y] = x;
