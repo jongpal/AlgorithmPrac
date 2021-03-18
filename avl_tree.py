@@ -30,6 +30,33 @@ class AVL_tree(object):
     if balance < -1 and key > root.right.val:
       return self.leftRotate(root)
     return root
+  def delete(self, root, key):
+    if key is root.val:
+      if self.getBalance(root) >= 0:
+        if root.left is None:
+          root = None
+          return root
+        root = self.rightRotate(root)
+        if root.right.left:
+          root.right.left.right = root.right.right
+          root.right = root.right.left
+        else:
+          root.right = root.right.right
+      else:
+        if root.right is None:
+          root = None
+          return root
+        root = self.leftRotate(root)
+        if root.left.right:
+          root.left.right.left = root.left.left
+          root.left = root.left.right
+        else:
+          root.left = root.left.left      
+    elif key < root.val:
+      root.left = self.delete(root.left, key)
+    elif key > root.val:
+      root.right = self.delete(root.right, key)
+    return root
   def getHeight(self, root):
     if not root:
       return 0
