@@ -2,12 +2,15 @@
 #include <random>
 #include <vector>
 #include <chrono>
-
+#define CUTOFF 10
 // #define ARR_SIZE 9
 /*
   1. median 3 randomized quick sort
   2. tail recursive quick sort
   3. bitmap sorting(but don't assume that there is a same value)
+  4. quickSort + InsertionSort => which will alleviate some overhead comes with handling small arrays
+
+  running time(shortest to longest) : bitmap sorting << quickSort + insertionSort < quickSort
 */
 
 int get_random (int min, int max){
@@ -72,7 +75,40 @@ int partition(std::vector<int> &a, int s_ind, int e_ind){
   swap(&a[e_ind], &a[++i]);
   return i;
 }
+void insertionSort(std::vector<int> &a, int s_ind, int e_ind){
+  for (int i = s_ind + 1; i <= e_ind; i++) {
+    compareAndSwap(a, i, s_ind);
+  }
+}
 
+void quickSort_(std::vector<int> &a, int s_ind, int e_ind){
+  int *m_result;
+  
+  // partition point
+  int q;
+  // terminate condition
+  if(s_ind >= e_ind) return;
+  // initialize : median3 + swapping that value with the last one
+  if((e_ind-s_ind+1) >= 3){
+    m_result = median3(a, s_ind, e_ind);
+    swap(m_result, &a[e_ind]);
+    q = partition(a, s_ind, e_ind);
+  }
+  else if (e_ind - s_ind + 1 <= CUTOFF) {
+    return;
+  }
+  else 
+    q = partition(a, s_ind, e_ind);
+ 
+  // left, right quickSort
+  quickSort_(a, s_ind, q-1);
+  quickSort_(a, q+1, e_ind);
+}
+
+void quickSortWithInsertionSort(std::vector<int> &a, int s_ind, int e_ind) {
+  quickSort_(a, s_ind, e_ind);
+  insertionSort(a, s_ind, e_ind);
+}
 void quickSort(std::vector<int> &a, int s_ind, int e_ind){
   int *m_result;
   
@@ -144,6 +180,17 @@ int main() {
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
 
   std::cout << "\ntime it tooks to implement qsort : " << duration.count() << '\n';
+
+  auto start2 = std::chrono::high_resolution_clock::now();
+
+  quickSortWithInsertionSort(r, 0, r.size()-1);
+
+  
+  auto stop2 = std::chrono::high_resolution_clock::now(); 
+
+  auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(stop2 - start2);
+
+  std::cout << "\ntime it tooks to implement qsort : " << duration2.count() << '\n';
 
   std::vector <int> bitmap (1000000);
   std::vector <int> output;
