@@ -62,7 +62,23 @@ void swap(int *a, int *b){
   *a = *b;
   *b = temp;
 }
+int partition(std::vector<int> &a, int s_ind, int e_ind){
+  int comp = a[s_ind];
+  int i = s_ind;
+  int j = e_ind + 1;
 
+  for(;;) {
+    while(a[++i] < comp) if(i >= e_ind) break;
+    while(a[--j] > comp) if(j <= s_ind) break;
+
+    if(i >= j) break;
+    swap(&a[i], &a[j]);
+  }
+
+  swap(&a[s_ind], &a[j]);
+  return j;
+}
+/*
 int partition(std::vector<int> &a, int s_ind, int e_ind){
   int ind = a[e_ind];
   int i = s_ind - 1;
@@ -74,7 +90,7 @@ int partition(std::vector<int> &a, int s_ind, int e_ind){
   }
   swap(&a[e_ind], &a[++i]);
   return i;
-}
+}*/
 void insertionSort(std::vector<int> &a, int s_ind, int e_ind){
   for (int i = s_ind + 1; i <= e_ind; i++) {
     compareAndSwap(a, i, s_ind);
