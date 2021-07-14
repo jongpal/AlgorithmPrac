@@ -88,14 +88,14 @@ void quickSort_(std::vector<int> &a, int s_ind, int e_ind){
   int q;
   // terminate condition
   if(s_ind >= e_ind) return;
+  if (e_ind - s_ind + 1 <= CUTOFF) {
+    return;
+  }
   // initialize : median3 + swapping that value with the last one
   if((e_ind-s_ind+1) >= 3){
     m_result = median3(a, s_ind, e_ind);
     swap(m_result, &a[e_ind]);
     q = partition(a, s_ind, e_ind);
-  }
-  else if (e_ind - s_ind + 1 <= CUTOFF) {
-    return;
   }
   else 
     q = partition(a, s_ind, e_ind);
